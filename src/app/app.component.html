@@ -1,15 +1,5 @@
 <style>
 
-  .letterVocalOrConsonant {
-    font-size: 5em;
-    display: block;
-  }
-
-  .letterVocalOrConsonantContainer {
-    width: 45%;
-
-  }
-
   :host {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 14px;
@@ -115,7 +105,6 @@
     transition: all 0.2s ease-in-out;
     line-height: 24px;
   }
-
 
 
   .card-container .card:not(:last-child) {
@@ -274,6 +263,75 @@
       visibility: hidden;
     }
   }
+
+  .column {
+    text-align: center;
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 25vh; /* Should be removed. Only for demonstration */
+    font-size: 5vw
+  }
+
+  p.lettersVocalOrConsonant {
+    padding: 10px;
+    /* border: 1px solid #f00; */
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .gameHeader {
+    all: unset;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    width: 10vw;
+    padding: 17px;
+    /* position: absolute; */
+    display: flex;
+    /* flex-direction: column-reverse; */
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+    line-height: 24px;
+    background: cadetblue;
+  }
+
+  .gameSelectedAndBegin {
+    justify-content: right;
+    position: absolute;
+    right: 0;
+  }
+
+  .parentCards {
+    width: 54%;
+    white-space: nowrap;
+    overflow-x: auto;
+    display: table;
+  }
+
+  .mom {
+    width: 100%; /* Try setting this to 400px or something */
+    display: table;
+  }
+
+  .cardsParent {
+    display: table-cell;
+  }
+
+  .cards {
+    width: 15%;
+    margin-left: 25px;
+    min-height: 20vh;
+    font-size: 6em;
+  }
 </style>
 
 <!-- Toolbar -->
@@ -281,12 +339,16 @@
   <a aria-label="Angular on twitter" target="_blank" rel="noopener" href="https://github.com/delalama" title="Git">
     <img
       width="40"
-      alt="Angular Logo"
-      src="assets/Git_icon.svg"
     />
   </a>
   <span id="title" (click)="resetGame()">{{ title }} </span>
 
+  <div class="gameSelectedAndBegin">
+    <a class="gameHeader" target="_blank" rel="noopener" (click)="LETTERS()"
+       *ngIf="GAME_MODE===GAME_MODE_LETTERS">
+      <span>LETRAS</span>
+    </a>
+  </div>
 
 </div>
 
@@ -325,7 +387,7 @@
       <div class="card-container">
 
         <a class="card" target="_blank" rel="noopener" (click)="CLASSIC_GAME()"
-           *ngIf="!gameStart || GAME_MODE===GAME_MODE_CLASSIC">
+           *ngIf="!gameStart">
           <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
           </svg>
@@ -333,7 +395,7 @@
         </a>
 
         <a class="card" target="_blank" rel="noopener" (click)="NUMBERS()"
-           *ngIf="!gameStart || GAME_MODE===GAME_MODE_NUMBERS">
+           *ngIf="!gameStart">
           <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path
               d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>
@@ -342,7 +404,7 @@
         </a>
 
         <a class="card" target="_blank" rel="noopener" (click)="LETTERS()"
-           *ngIf="!gameStart || GAME_MODE===GAME_MODE_LETTERS">
+           *ngIf="!gameStart">
           <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
           </svg>
@@ -354,76 +416,64 @@
       <div class="container" id="board">
 
         <div *ngIf="GAME_MODE === GAME_MODE_NUMBERS && gameStart">
-          <!--          -->
-          <!--          <h2>NUMBERS</h2>-->
-          <!--          <ul class="heroes">-->
-          <!--            <li *ngFor="let eachPlayer of players" let i=index;>-->
-          <!--              <button-->
-          <!--                type="button">-->
-          <!--                <span class="badge">{{eachPlayer.id + 1}}</span>-->
-          <!--                <span class="name">{{eachPlayer.name}}</span>-->
-          <!--              </button>-->
-          <!--            </li>-->
-          <!--          </ul>-->
-          <span>JUEGO DE NÚMEROS</span>
+          <div class="row">
+            <div class="column" style="background-color:#aaa;">
+              <p class="lettersVocalOrConsonant">VOCAL</p>
+            </div>
+            <div class="column" style="background-color:#bbb;">
+              <p class="lettersVocalOrConsonant">Some text..</p>
+            </div>
+          </div>
+          <span>NUMBERS GAME</span>
         </div>
 
         <div *ngIf="GAME_MODE === GAME_MODE_LETTERS && gameStart">
-          <h2>CONTADOR: quedan {{PENDING_LETTERS}}</h2>
-
-          <div class="row" style="width: 90%; display: -webkit-inline-box;" *ngIf="!LETTERS_CHOSEN">
-            <div class="letterVocalOrConsonantContainer" style="background-color:#aaa;">
-
-              <a class="card2" target="_blank" rel="noopener" (click)="VOCAL_CHOOSEN()">
-                <span class="letterVocalOrConsonant">VOCAL</span>
-              </a>
-            </div>
-
-            <div class="letterVocalOrConsonantContainer" style="background-color:#aaa;">
-              <a class="card2" target="_blank" rel="noopener" (click)="CONSONANT_CHOOSEN()">
-                <span class="letterVocalOrConsonant">CONSONANT</span>
-              </a>
+          <div class="mom">
+            <div class="cardsParent" *ngFor="let letter of chosenLettters">
+                <h1 class="cards">{{letter}}</h1>
             </div>
           </div>
 
-            <ul class="heroes" *ngIf="LETTERS_CHOSEN">
-              <li *ngFor="let letter of letters" let i=index;>
-                <button
-                  type="button">
-                  <span class="name">{{letter}}</span>
-                </button>
-              </li>
-            </ul>
+          <div *ngIf="!LETTERS_GAME_BEGIN">
+            <div class="column" style="background-color:#aaa;">
+              <p (click)="getLetterService(Type_Of_Letter_VOCAL)" class="lettersVocalOrConsonant">VOCAL</p>
+            </div>
+            <div class="column" style="background-color:#bbb;">
+              <p (click)="getLetterService(Type_Of_Letter_CONSTANT)" class="lettersVocalOrConsonant">CONSONANTE</p>
+            </div>
           </div>
 
+          <div>
+            <h1 *ngIf="LETTERS_GAME_BEGIN">EMPIEZA EL JUEGO, CRIPTOBRRRO</h1>
+          </div>
+          <span>LETTERS GAME</span>
         </div>
 
+
       </div>
+      <!--      board-->
+
     </div>
-
-
-    <hr>
-
-
-    <!-- Footer -->
-    <footer>
-      <div class="spacer"></div>
-      <!--    <a aria-label="Angular on twitter" target="_blank" rel="noopener" href="https://github.com/delalama" title="Git">-->
-      <!--      <img id="gitIcon" src="assets/Git_icon.svg" width="100px"/>-->
-      <!--    </a>-->
-      <a aria-label="Angular on twitter" target="_blank" rel="noopener"
-         href="https://www.bing.com/images/search?view=detailV2&ccid=0iDEQ1Wv&id=2992834321E0C1AAC1CA02D1596AEF19B82B84D0&thid=OIP.0iDEQ1Wvwna4dOcba19UlgAAAA&mediaurl=https%3a%2f%2fcdn.memegenerator.es%2fimagenes%2fmemes%2ffull%2f0%2f9%2f98346.jpg&cdnurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fR.d220c44355afc276b874e71b6b5f5496%3frik%3d0IQruBnvalnRAg%26pid%3dImgRaw%26r%3d0&exph=400&expw=400&q=asi+que+eres+gay&simid=608048295974670790&FORM=IRPRST&ck=4F8B9BC9558338ADC831DB6F2AE5E3B7&selectedIndex=0&ajaxhist=0&ajaxserp=0"
-         title="Git">
-        <img id="gitIcon" src="assets/Git_icon.svg" width="100px"/>
-      </a>
-    </footer>
-
-    <svg id="clouds" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677"
-         viewBox="0 0 2611.084 485.677">
-      <title>Gray Clouds Background</title>
-      <path id="Path_39" data-name="Path 39"
-            d="M2379.709,863.793c10-93-77-171-168-149-52-114-225-105-264,15-75,3-140,59-152,133-30,2.83-66.725,9.829-93.5,26.25-26.771-16.421-63.5-23.42-93.5-26.25-12-74-77-130-152-133-39-120-212-129-264-15-54.084-13.075-106.753,9.173-138.488,48.9-31.734-39.726-84.4-61.974-138.487-48.9-52-114-225-105-264,15a162.027,162.027,0,0,0-103.147,43.044c-30.633-45.365-87.1-72.091-145.206-58.044-52-114-225-105-264,15-75,3-140,59-152,133-53,5-127,23-130,83-2,42,35,72,70,86,49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33,61.112,8.015,113.854-5.72,150.492-29.764a165.62,165.62,0,0,0,110.861-3.236c47,94,178,113,251,33,31.385,4.116,60.563,2.495,86.487-3.311,25.924,5.806,55.1,7.427,86.488,3.311,73,80,204,61,251-33a165.625,165.625,0,0,0,120,0c51,13,108,15,157-5a147.188,147.188,0,0,0,33.5-18.694,147.217,147.217,0,0,0,33.5,18.694c49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33C2446.709,1093.793,2554.709,922.793,2379.709,863.793Z"
-            transform="translate(142.69 -634.312)" fill="#eee"/>
-    </svg>
-
   </div>
+
+
+  <hr>
+
+
+  <!-- Footer -->
+  <footer>
+    <div class="spacer"></div>
+    <a aria-label="Angular on twitter" target="_blank" rel="noopener" href="https://github.com/delalama" title="Git">
+      <img id="gitIcon" src="assets/Git_icon.svg" width="100px"/>
+    </a>
+  </footer>
+
+  <svg id="clouds" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677"
+       viewBox="0 0 2611.084 485.677">
+    <title>Gray Clouds Background</title>
+    <path id="Path_39" data-name="Path 39"
+          d="M2379.709,863.793c10-93-77-171-168-149-52-114-225-105-264,15-75,3-140,59-152,133-30,2.83-66.725,9.829-93.5,26.25-26.771-16.421-63.5-23.42-93.5-26.25-12-74-77-130-152-133-39-120-212-129-264-15-54.084-13.075-106.753,9.173-138.488,48.9-31.734-39.726-84.4-61.974-138.487-48.9-52-114-225-105-264,15a162.027,162.027,0,0,0-103.147,43.044c-30.633-45.365-87.1-72.091-145.206-58.044-52-114-225-105-264,15-75,3-140,59-152,133-53,5-127,23-130,83-2,42,35,72,70,86,49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33,61.112,8.015,113.854-5.72,150.492-29.764a165.62,165.62,0,0,0,110.861-3.236c47,94,178,113,251,33,31.385,4.116,60.563,2.495,86.487-3.311,25.924,5.806,55.1,7.427,86.488,3.311,73,80,204,61,251-33a165.625,165.625,0,0,0,120,0c51,13,108,15,157-5a147.188,147.188,0,0,0,33.5-18.694,147.217,147.217,0,0,0,33.5,18.694c49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33C2446.709,1093.793,2554.709,922.793,2379.709,863.793Z"
+          transform="translate(142.69 -634.312)" fill="#eee"/>
+  </svg>
+
+</div>
