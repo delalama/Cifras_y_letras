@@ -12,6 +12,8 @@ import {Type_Of_Letter} from "./models/Type_Of_Letter";
 
 export class AppComponent implements OnInit {
 
+  counter: { min: number, sec: number }
+
   ngOnInit() {
     this.APP_INFO = "INTRODUCE NOMBRES BUFARELAS";
     this.gameStart = false;
@@ -95,20 +97,19 @@ export class AppComponent implements OnInit {
   }
 
   getLetterService(type_of_letter: Type_Of_Letter){
-    debugger
 
     var chosenLetter = Type_Of_Letter.VOCAL === type_of_letter ? this.getVocal(): this.getConsonant();
 
-    // displayChosenLetter(chosenLetter);
-
-    if( this.chosenLettters.length == 7 ){
+    if( this.chosenLettters.length == 9 ){
       this.LETTERS_GAME_BEGIN = true;
+      this.startTimer();
+      while(this.counter.sec != 0){
+        this.LETTERS_GAME_BEGIN = false;
+      }
     }
   }
 
   getVocal() {
-    debugger
-
     let candidateAproved = false;
 
     let candidateVocal = "";
@@ -128,8 +129,6 @@ export class AppComponent implements OnInit {
   }
 
   getConsonant() {
-    debugger
-
     let candidateAproved = false;
 
     let candidateConsonante = "";
@@ -137,7 +136,7 @@ export class AppComponent implements OnInit {
     while (!candidateAproved) {
       candidateConsonante = this.getCandidateConsonant();
 
-      if (this.areTwoCoincidences(candidateConsonante, this.chosenLettters )) {
+      if (!this.areTwoCoincidences(candidateConsonante, this.chosenLettters )) {
         candidateAproved = true;
       }
     }
@@ -188,6 +187,7 @@ export class AppComponent implements OnInit {
   // LETTERS
   Type_Of_Letter_VOCAL: Type_Of_Letter = Type_Of_Letter.VOCAL;
   Type_Of_Letter_CONSTANT: Type_Of_Letter = Type_Of_Letter.CONSONANT;
+  timer: number;
 
   VOCAL_CHOOSEN() {
 
@@ -196,4 +196,18 @@ export class AppComponent implements OnInit {
   CONSONANT_CHOOSEN() {
 
   }
+
+  startTimer() {
+    this.counter = { min: 0, sec: 30 }
+    let intervalId = setInterval(() => {
+      if (this.counter.sec - 1 == -1) {
+        this.counter.min -= 1;
+        this.counter.sec = 59
+      }
+      else this.counter.sec -= 1
+      if (this.counter.min === 0 && this.counter.sec == 0) clearInterval(intervalId)
+    }, 1000)
+  }
+
 }
+
