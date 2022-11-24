@@ -245,8 +245,42 @@
     /* letter-spacing: 0.3ch; */
     background: #ffffff;
     position: relative;
-    margin: 2vw;
+    margin: 1vw 2vw 0.5vw 2vw;;
     width: 13%;
+    justify-content: center;
+  }
+
+  .gameCardNumberToCalculate {
+    font-size: 9em;
+    filter: invert();
+    background: white;
+    color: black;
+    text-align: center;
+    padding: 7rem 0rem;
+    display: inline-block;
+    border: 6px solid #333333;
+    font-size: 11em;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    position: relative;
+    margin: 1vw;
+    width: 45%;
+    justify-content: center;
+    font-family: emoji;
+  }
+
+  .gameCardNumber {
+    text-align: center;
+    padding: 3rem 1rem;
+    display: inline-block;
+    border: 3px solid #333333;
+    font-size: 9em;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    background: #ffffff;
+    position: relative;
+    margin: 2vw;
+    width: 24%;
     justify-content: center;
   }
 
@@ -390,6 +424,13 @@
     </a>
   </div>
 
+  <div class="gameSelectedAndBegin">
+    <a class="gameHeader" target="_blank" rel="noopener"
+       *ngIf="GAME_MODE===GAME_MODE_NUMBERS">
+      <span>CIFRAS</span>
+    </a>
+  </div>
+
 </div>
 
 <div class="content" role="main">
@@ -426,13 +467,13 @@
 
       <div class="card-container">
 
-        <a class="card" target="_blank" rel="noopener" (click)="CLASSIC_GAME()"
-           *ngIf="!gameStart">
-          <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-          </svg>
-          <span>JUEGO CLÁSICO</span>
-        </a>
+<!--        <a class="card" target="_blank" rel="noopener" (click)="CLASSIC_GAME()"-->
+<!--           *ngIf="!gameStart">-->
+<!--          <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">-->
+<!--            <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>-->
+<!--          </svg>-->
+<!--          <span>JUEGO CLÁSICO</span>-->
+<!--        </a>-->
 
         <a class="card" target="_blank" rel="noopener" (click)="NUMBERS()"
            *ngIf="!gameStart">
@@ -456,15 +497,18 @@
       <div class="container" id="board">
 
         <div *ngIf="GAME_MODE === GAME_MODE_NUMBERS && gameStart">
-          <div class="row">
-            <div class="column" style="background-color:#aaa;">
-              <p class="lettersVocalOrConsonantSmall">del 1 al 10</p>
+          <div class="row gameCardParent" style="width: 100%">
+            <div class="gameCardNumber" *ngFor="let number of choosenNumbers">
+              {{number}}
             </div>
-            <div class="column" style="background-color:#bbb;">
-              <p class="lettersVocalOrConsonantSmall">10, 25, 75 o 100</p>
+            <div class="gameCardNumberToCalculate">
+              {{NUMBER_TO_CALCULATE}}
+            </div>
+            <div class="gameCardNumberToCalculate" *ngIf="counter.sec != 0">
+              {{counter.sec}}
             </div>
           </div>
-          <span>NUMBERS GAME</span>
+
         </div>
 
         <div *ngIf="GAME_MODE === GAME_MODE_LETTERS && gameStart">
@@ -485,13 +529,11 @@
           </div>
 
           <div class="clock" *ngIf="LETTERS_GAME_BEGIN">
-            <div class="row" id="timer">
-               {{counter.sec}}
+            <div class="row" id="timer" *ngIf="counter.sec != 0">
+              {{counter.sec}}
             </div>
           </div>
         </div>
-
-
       </div>
       <!--      board-->
 
