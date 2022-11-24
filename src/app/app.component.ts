@@ -13,6 +13,7 @@ import {Type_Of_Letter} from "./models/Type_Of_Letter";
 export class AppComponent implements OnInit {
 
   counter: { min: number, sec: number }
+  remainingChoosen: number;
 
   ngOnInit() {
     this.APP_INFO = "INTRODUCE NOMBRES BUFARELAS";
@@ -45,6 +46,8 @@ export class AppComponent implements OnInit {
   vocals: string[] = ["A", "E", "I", "O", "U"];
   consonants: string[] = ["B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "W", "X", "Y", "Z"];
   LETTERS_GAME_BEGIN: boolean;
+  _CONF_LETTERS_NUMBER = 9;
+  LETTERS_TIMER_FINISHED: boolean;
 
   print() {
     console.log('print');
@@ -72,6 +75,8 @@ export class AppComponent implements OnInit {
       this.APP_INFO = 'ELIJA LETRAS'
       this.chosenVocals = [];
       this.chosenConsonants = [];
+      this.APP_INFO = "Faltan " + this._CONF_LETTERS_NUMBER + " letras para empezar.";
+      this.LETTERS_TIMER_FINISHED = false;
     }
   }
 
@@ -79,6 +84,7 @@ export class AppComponent implements OnInit {
     const randomVocal = Math.floor(Math.random() * this.vocals.length);
     return this.vocals[randomVocal];
   }
+
   areTwoCoincidences(candidateLetter: string, lettersArray: string[]) {
     var counter = 0;
     for (const letter of lettersArray) {
@@ -96,16 +102,21 @@ export class AppComponent implements OnInit {
     return this.consonants[randomVocal];
   }
 
-  getLetterService(type_of_letter: Type_Of_Letter){
+  setRemainingLettersToChooseMessage() {
+    let number = this.remainingChoosen = this._CONF_LETTERS_NUMBER - this.chosenLettters.length;
+    this.APP_INFO = "Faltan " + number + " letras para empezar.";
+  }
 
-    var chosenLetter = Type_Of_Letter.VOCAL === type_of_letter ? this.getVocal(): this.getConsonant();
+  getLetterService(type_of_letter: Type_Of_Letter) {
+    var chosenLetter = Type_Of_Letter.VOCAL === type_of_letter ? this.getVocal() : this.getConsonant();
 
-    if( this.chosenLettters.length == 9 ){
+    this.setRemainingLettersToChooseMessage();
+
+    if (this.chosenLettters.length == 9) {
+      this.APP_INFO = "Busca la combinación más larga"
       this.LETTERS_GAME_BEGIN = true;
       this.startTimer();
-      while(this.counter.sec != 0){
-        this.LETTERS_GAME_BEGIN = false;
-      }
+
     }
   }
 
@@ -136,7 +147,7 @@ export class AppComponent implements OnInit {
     while (!candidateAproved) {
       candidateConsonante = this.getCandidateConsonant();
 
-      if (!this.areTwoCoincidences(candidateConsonante, this.chosenLettters )) {
+      if (!this.areTwoCoincidences(candidateConsonante, this.chosenLettters)) {
         candidateAproved = true;
       }
     }
@@ -181,7 +192,11 @@ export class AppComponent implements OnInit {
     this.gameStart = false;
     this.LETTERS_CHOSEN = false;
     this.APP_INFO = "INTRODUCE NOMBRES BUFARELAS";
-
+    // @ts-ignore
+    if( !this.players.length > 0){
+      this.APP_INFO = "INTRODUCE NOMBRES BUFARELAS";
+    }
+    this.GAME_MODE = {id: 4, name: 'nulo'};
   }
 
   // LETTERS
@@ -198,14 +213,19 @@ export class AppComponent implements OnInit {
   }
 
   startTimer() {
-    this.counter = { min: 0, sec: 30 }
+    this.counter = {min: 0, sec: 30}
     let intervalId = setInterval(() => {
       if (this.counter.sec - 1 == -1) {
         this.counter.min -= 1;
         this.counter.sec = 59
+      } else this.counter.sec -= 1
+      if (this.counter.min === 0 && this.counter.sec == 0) {
+        clearInterval(intervalId)
+        this.LETTERS_GAME_BEGIN = false;
+        this.LETTERS_TIMER_FINISHED = true;
+        this.chosenLettters = [];
       }
-      else this.counter.sec -= 1
-      if (this.counter.min === 0 && this.counter.sec == 0) clearInterval(intervalId)
+      return false;
     }, 1000)
   }
 

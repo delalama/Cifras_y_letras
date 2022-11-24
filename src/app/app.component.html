@@ -47,7 +47,7 @@
     display: flex;
     margin: 82px auto 32px;
     padding: 0 16px;
-    max-width: 1800px;
+    max-width: 90%;
     flex-direction: column;
     align-items: center;
   }
@@ -230,6 +230,25 @@
     box-sizing: border-box;
   }
 
+  .gameCardParent {
+    text-align: center;
+  }
+
+  .gameCard {
+    text-align: center;
+    padding: 6rem 1rem;
+    display: inline-block;
+    border: 3px solid #333333;
+    font-size: 14em;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    /* letter-spacing: 0.3ch; */
+    background: #ffffff;
+    position: relative;
+    margin: 2vw;
+    width: 13%;
+    justify-content: center;
+  }
 
   .column1 {
     float: left;
@@ -270,15 +289,32 @@
     width: 50%;
     padding: 10px;
     height: 25vh; /* Should be removed. Only for demonstration */
-    font-size: 5vw
+    font-size: 4em;
+    cursor: pointer;
   }
 
   p.lettersVocalOrConsonant {
-    padding: 10px;
-    /* border: 1px solid #f00; */
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+    text-align: center;
+    padding: 6rem 1rem;
+    /* display: inline-block; */
+    border: 3px solid #333333;
+    font-size: 1.4em;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    background: #ffffff;
+    justify-content: center;
+  }
+
+  p.lettersVocalOrConsonantSmall {
+    text-align: center;
+    padding: 6rem 1rem;
+    /* display: inline-block; */
+    border: 3px solid #333333;
+    font-size: 1.4em;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    background: #ffffff;
+    justify-content: center;
   }
 
   /* Clear floats after the columns */
@@ -317,34 +353,38 @@
     display: table;
   }
 
-  .mom {
-    width: 100%; /* Try setting this to 400px or something */
-    display: table;
+  .clock {
+    background: cornflowerblue;
+    text-align: center;
   }
 
-  .cardsParent {
-    display: table-cell;
+  #timer {
+    text-align: center;
+    display: inline-block;
+    /* border: 3px solid #333333; */
+    font-size: 8em;
+    /* border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%; */
+    text-transform: uppercase;
+    /* background: #ffffff; */
+    position: relative;
+    margin: 2vw;
+    /* width: 13%; */
+    justify-content: center;
+    text-align: center;
   }
 
-  .cards {
-    width: 15%;
-    margin-left: 25px;
-    min-height: 20vh;
-    font-size: 6em;
-  }
 </style>
 
-<!-- Toolbar -->
 <div class="toolbar" role="banner">
   <a aria-label="Angular on twitter" target="_blank" rel="noopener" href="https://github.com/delalama" title="Git">
     <img
       width="40"
     />
   </a>
-  <span id="title" (click)="resetGame()">{{ title }} </span>
+  <span id="title" (click)="resetGame()">{{title}} </span>
 
   <div class="gameSelectedAndBegin">
-    <a class="gameHeader" target="_blank" rel="noopener" (click)="LETTERS()"
+    <a class="gameHeader" target="_blank" rel="noopener"
        *ngIf="GAME_MODE===GAME_MODE_LETTERS">
       <span>LETRAS</span>
     </a>
@@ -356,7 +396,7 @@
 
   <h2>{{APP_INFO}}</h2>
 
-  <div class="row" style="width: 90%">
+  <div class="row" style="width: 100%">
     <div class="column1" style="background-color:#aaa;">
       <h2>Players</h2>
       <ul class="heroes">
@@ -418,35 +458,37 @@
         <div *ngIf="GAME_MODE === GAME_MODE_NUMBERS && gameStart">
           <div class="row">
             <div class="column" style="background-color:#aaa;">
-              <p class="lettersVocalOrConsonant">VOCAL</p>
+              <p class="lettersVocalOrConsonantSmall">del 1 al 10</p>
             </div>
             <div class="column" style="background-color:#bbb;">
-              <p class="lettersVocalOrConsonant">Some text..</p>
+              <p class="lettersVocalOrConsonantSmall">10, 25, 75 o 100</p>
             </div>
           </div>
           <span>NUMBERS GAME</span>
         </div>
 
         <div *ngIf="GAME_MODE === GAME_MODE_LETTERS && gameStart">
-          <div class="mom">
-            <div class="cardsParent" *ngFor="let letter of chosenLettters">
-                <h1 class="cards">{{letter}}</h1>
-            </div>
-          </div>
 
           <div *ngIf="!LETTERS_GAME_BEGIN">
-            <div class="column" style="background-color:#aaa;">
-              <p (click)="getLetterService(Type_Of_Letter_VOCAL)" class="lettersVocalOrConsonant">VOCAL</p>
+            <div (click)="getLetterService(Type_Of_Letter_VOCAL)" class="column">
+              <p class="lettersVocalOrConsonant">VOCAL</p>
             </div>
-            <div class="column" style="background-color:#bbb;">
-              <p (click)="getLetterService(Type_Of_Letter_CONSTANT)" class="lettersVocalOrConsonant">CONSONANTE</p>
+            <div (click)="getLetterService(Type_Of_Letter_CONSTANT)" class="column">
+              <p class="lettersVocalOrConsonant">CONSONANTE</p>
             </div>
           </div>
 
-          <div>
-            <h1 *ngIf="LETTERS_GAME_BEGIN">EMPIEZA EL JUEGO, CRIPTOBRRRO</h1>
+          <div class="row gameCardParent" style="width: 100%">
+            <div class="gameCard" *ngFor="let letter of chosenLettters">
+              {{letter}}
+            </div>
           </div>
-          <span>LETTERS GAME</span>
+
+          <div class="clock" *ngIf="LETTERS_GAME_BEGIN">
+            <div class="row" id="timer">
+               {{counter.sec}}
+            </div>
+          </div>
         </div>
 
 
