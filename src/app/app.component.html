@@ -1,5 +1,15 @@
 <style>
 
+  .numbersAgainButtonDiv {
+    text-align: center;
+  }
+
+  .numbersAgainButton {
+    width: 50vw;
+    height: 15vh;
+    font-size: 3em;
+  }
+
   .app_info {
     font-size: 4vw;
     margin-bottom: 33px;
@@ -292,16 +302,14 @@
 
   .column1 {
     float: left;
-    width: 20%;
+    width: 100%;
     padding: 10px;
-    min-height: 500px;
   }
 
   .column2 {
     float: left;
-    width: 80%;
+    width: 100%;
     padding: 10px;
-    min-height: 500px;
   }
 
   /* Clear floats after the columns */
@@ -443,19 +451,7 @@
 
   <h2 class="app_info">{{APP_INFO}}</h2>
 
-  <div class="row" style="width: 100%">
-    <div class="column1" style="background-color:#aaa;">
-      <h2>Players</h2>
-      <ul class="heroes">
-        <li *ngFor="let eachPlayer of players" let i=index;>
-          <button
-            type="button">
-            <span class="badge">{{eachPlayer.id + 1}}</span>
-            <span class="name">{{eachPlayer.name}}</span>
-          </button>
-        </li>
-      </ul>
-    </div>
+  <div class="" style="width: 100%">
 
     <div class="column2" style="background-color:#bbb;">
       <div ng-app="" *ngIf="!gameStart">
@@ -463,7 +459,6 @@
           <mat-label>Name</mat-label>
           <input
             [(ngModel)]="player.name"
-            (click)="createNewPLayer()"
             (keyup.enter)="onPressEnterOnNameInput()"
             matInput
             placeholder="Pálot´s Péric">
@@ -514,12 +509,14 @@
               {{counter.sec}}
             </div>
           </div>
-
+          <div class="numbersAgainButtonDiv">
+            <button class="numbersAgainButton" type="button" (click)="numbersAgain()" *ngIf="CIFRAS_GAME_FINISHED">CIFRAS AGAIN</button>
+          </div>
         </div>
 
         <div *ngIf="GAME_MODE === GAME_MODE_LETTERS && gameStart">
 
-          <div *ngIf="LETTERS_GAME_BEGIN">
+          <div>
             <div class="row gameCardParent" style="width: 100%">
               <div class="gameCard" *ngFor="let letter of choosenLettters">
                 {{letter}}
@@ -539,6 +536,18 @@
       </div>
     </div>
 
+    <div class="column1" style="background-color:#aaa;">
+      <h2>Players</h2>
+      <ul class="heroes">
+        <li *ngFor="let eachPlayer of players" let i=index;>
+          <button
+            type="button">
+            <span class="badge">{{eachPlayer.id + 1}}</span>
+            <span class="name">{{eachPlayer.name}}</span>
+          </button>
+        </li>
+      </ul>
+    </div>
 
     <hr>
 

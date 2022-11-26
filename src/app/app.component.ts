@@ -45,6 +45,7 @@ export class AppComponent implements OnInit {
 
   // NUMBERS GAME
   NUMBER_TO_CALCULATE: number;
+  CIFRAS_GAME_FINISHED: boolean;
 
   // LETTERS GAME
   TYPE_OF_LETER: Type_Of_Letter[] = [Type_Of_Letter.VOCAL, Type_Of_Letter.CONSONANT];
@@ -80,6 +81,8 @@ export class AppComponent implements OnInit {
       this.GAME_MODE = GAME_MODE_NUMBERS;
       this.choosenNumbers = [];
 
+      this.CIFRAS_GAME_FINISHED = false;
+
       this.APP_INFO = "A calcular";
 
       this.setRandomNumbers();
@@ -103,8 +106,6 @@ export class AppComponent implements OnInit {
       this.LETTERS_TIMER_FINISHED = false;
 
       this.LETTERS_GAME_BEGIN = true;
-
-      this.choosenNumbers = [];
 
       for (var i = 0; i < 9; i++) {
         this.getLetterService();
@@ -215,9 +216,8 @@ export class AppComponent implements OnInit {
   begin() {
     if (this.choosenLettters.length == 9) {
       var palabra = "";
-      debugger;
       this.choosenLettters.forEach(letter => palabra += letter);
-      this.APP_INFO = "Las letras son: " + palabra;
+      this.APP_INFO = "Haga la palabra más larga";
       this.LETTERS_GAME_BEGIN = true;
       this.startTimer(30);
     }
@@ -268,10 +268,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-
-  createNewPLayer() {
-  }
-
   onPressEnterOnNameInput() {
     if (this.player.name.length > 0) {
       this.players.push(this.player);
@@ -311,8 +307,6 @@ export class AppComponent implements OnInit {
   startTimer(seconds: number) {
     this.counter = {min: 0, sec: seconds}
 
-    debugger;
-
     let intervalId = setInterval(() => {
       console.log(this.counter.sec);
       if (this.counter.sec - 1 == -1) {
@@ -323,25 +317,38 @@ export class AppComponent implements OnInit {
         clearInterval(intervalId)
         this.LETTERS_GAME_BEGIN = false;
         this.LETTERS_TIMER_FINISHED = true;
-        this.choosenLettters = [];
-        this.choosenNumbers = [];
+
+        debugger;
 
         if (!this.stopGames) {
-          this.counterCount();
-        }
+          if ( this.GAME_MODE === this.GAME_MODE_LETTERS ){
+            setTimeout(() => {
+              this.LETTERS();
+            }, 15000)
+          }
 
+          if ( this.GAME_MODE === this.GAME_MODE_NUMBERS ){
+            this.CIFRAS_GAME_FINISHED = true;
+          }
+        }
+        this.APP_INFO = "A discutir";
         this.playRandomAlarm();
       }
       return false;
     }, 1000)
   }
+  //
+  // counterCount() {
+  //
+  //   setTimeout(() => {
+  //     this.LETTERS();
+  //   }, 15000)
+  //
+  // }
 
-  counterCount() {
 
-    setTimeout(() => {
-      this.LETTERS();
-    }, 15000)
-
+  numbersAgain() {
+    this.NUMBERS();
   }
 
   getRandomNumberBetween(min: number, max: number) {
