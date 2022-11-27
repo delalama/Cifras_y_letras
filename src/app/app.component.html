@@ -252,7 +252,7 @@
   }
 
   .gameCard {
-    min-width: 15vw;
+    min-width: 12vw;
     text-align: center;
     padding: 3vw 1rem;
     display: inline-block;
@@ -510,7 +510,9 @@
             </div>
           </div>
           <div class="numbersAgainButtonDiv">
-            <button class="numbersAgainButton" type="button" (click)="numbersAgain()" *ngIf="CIFRAS_GAME_FINISHED">CIFRAS AGAIN</button>
+            <button class="numbersAgainButton" type="button" (click)="numbersAgain()" *ngIf="CIFRAS_GAME_FINISHED">
+              CIFRAS AGAIN
+            </button>
           </div>
         </div>
 
@@ -569,3 +571,4 @@
     </svg>
 
   </div>
+</div>

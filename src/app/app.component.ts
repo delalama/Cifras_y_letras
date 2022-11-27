@@ -61,14 +61,9 @@ export class AppComponent implements OnInit {
   _CONF_LETTERS_NUMBER = 9;
   LETTERS_TIMER_FINISHED: boolean;
 
-  print() {
-    console.log('print');
-  }
-
   // GAMES FUNCTIONS
   CLASSIC_GAME() {
     this.stopGames = false;
-    debugger
     if (this.canGameStart()) {
       while (!this.stopGames) {
         this.randomGame();
@@ -308,7 +303,6 @@ export class AppComponent implements OnInit {
     this.counter = {min: 0, sec: seconds}
 
     let intervalId = setInterval(() => {
-      console.log(this.counter.sec);
       if (this.counter.sec - 1 == -1) {
         this.counter.min -= 1;
         this.counter.sec = 59
@@ -317,8 +311,6 @@ export class AppComponent implements OnInit {
         clearInterval(intervalId)
         this.LETTERS_GAME_BEGIN = false;
         this.LETTERS_TIMER_FINISHED = true;
-
-        debugger;
 
         if (!this.stopGames) {
           if ( this.GAME_MODE === this.GAME_MODE_LETTERS ){
@@ -361,14 +353,14 @@ export class AppComponent implements OnInit {
 
   playRandomAlarm() {
     let audio = new Audio();
-    audio.src = '../assets/' + this.getRandomFinishAudio();
+    audio.src = 'assets/' + this.getRandomFinishAudio();
     audio.load();
     audio.play();
   }
 
   playSound(sound: string) {
     let audio = new Audio();
-    audio.src = '../assets/' + sound;
+    audio.src = 'assets/' + sound;
     audio.load();
     audio.play();
   }

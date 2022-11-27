@@ -1,5 +1,4 @@
-## Angular application to play an old fashion game called
+# CifrasYletras repo
 
-# Cifras y letras
+Angular game to have good time.
 
-# :)
